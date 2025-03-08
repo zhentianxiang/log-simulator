@@ -10,35 +10,50 @@
     <packaging>jar</packaging>
 
     <properties>
-        <!-- 设置项目编码为 UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 指定 Java 版本为 1.8 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- 依赖版本 -->
-        <slf4j.version>1.7.36</slf4j.version>
-        <logback.version>1.2.13</logback.version>
     </properties>
 
     <dependencies>
-        <!-- SLF4J API -->
+        <!-- Spring Boot Web 依赖 -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.36</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.7.17</version>  <!-- 兼容 Java 1.8 的 Spring Boot 版本 -->
         </dependency>
 
-        <!-- Logback 日志实现 -->
+        <!-- Spring Boot Actuator（提供健康检查和监控） -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.13</version>
-            <scope>runtime</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.7.17</version>
+        </dependency>
+
+        <!-- Spring Boot Starter Logging（包含 SLF4J + Logback） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+            <version>2.7.17</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Spring Boot Maven 插件（用于打包可执行 JAR） -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.17</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Maven 编译器插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -49,28 +64,6 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
-            </plugin>
-
-            <!-- Maven Shade 插件，用于打包可执行 JAR -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.example.LogExceptionSimulator</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
