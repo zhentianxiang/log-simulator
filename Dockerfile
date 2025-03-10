@@ -28,15 +28,13 @@ RUN mvn -s /usr/share/maven/ref/settings.xml package -DskipTests
 # 第二阶段：使用 JDK 8 运行 JAR
 FROM harbor.meta42.indc.vnet.com/library/jdk8:v4
 
+# 设置环境变量
 ARG JAVA_OPT
-
 ENV JAVA_OPT=${JAVA_OPT}
-
-# 设置环境变量，确保字符集为 UTF-8
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+ENV TZ=Asia/Shanghai
+ENV LANG=C.UTF-8
 
 WORKDIR /app
 COPY --from=build /app/target/log-simulator-1.0.0.jar ./app.jar
 
-ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", ${JAVA_OPT} , "-jar", "app.jar"]
+ENTRYPOINT java -Dfile.encoding=UTF-8 $JAVA_OPT -jar app.jar
